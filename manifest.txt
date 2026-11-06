@@ -1,0 +1,43 @@
+# Profitability Cockpit (public edition) build manifest: files are concatenated in this order by build.pl.
+# Data files (synthetic, from tools/gen_demo.py) define var globals; 05_pack.js can replace them with a loaded data pack,
+# then starts the app (everything between @wrap and @endwrap) via __app().
+[head]
+src/head.html
+[css]
+src/css/10_base.css
+src/css/20_theme.css
+[html]
+src/layout.html
+[js]
+data/meta.js
+data/submissions.js
+data/sub_lines.js
+data/ohl.js
+data/sku_submissions.js
+data/logo.js
+data/cfc.js
+data/mon.js
+data/mon_nov.js
+data/py.js
+data/fcs.js
+data/srp.js
+src/js/05_pack.js
+@wrap
+src/js/10_core.js
+src/js/12_views.js
+src/js/20_sku.js
+src/js/25_standout.js
+src/js/30_deck_prev.js
+src/js/40_cfc.js
+src/js/45_scenarios.js
+src/js/50_monthly.js
+src/js/55_compare.js
+src/js/57_whatif.js
+src/js/58_wi_xlsx.js
+src/js/60_deck.js
+src/js/70_controls.js
+src/js/80_insights.js
+src/js/85_engine.js
+src/js/90_boot.js
+@endwrap
+src/js/99_start.js

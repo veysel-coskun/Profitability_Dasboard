@@ -1,0 +1,258 @@
+<header class="top">
+  <button class="iconbtn railtog" id="railTog" title="Show / hide the filter panel" aria-label="Show or hide the filter panel" aria-expanded="true">☰</button>
+  <div class="brandmark"><img class="hlogo" id="hLogo" alt="" width="40" height="40">
+    <div><h1 id="hTitle">Profitability Cockpit</h1><div class="sub" id="hSub"></div></div></div>
+  <div class="slots" role="group" aria-label="Timeframes to compare">
+    <label class="slot"><span>Current forecast</span><select class="slotsel" data-slot="cur"></select></label>
+    <label class="slot"><span>Prior forecast</span><select class="slotsel" data-slot="pri"></select></label>
+    <label class="slot"><span>Prior year</span><select class="slotsel" data-slot="py"></select></label>
+  </div>
+  <button class="databtn" id="dataBtn" type="button" title="Use your own numbers: download the template, load a data pack, or go back to the demo data"><span class="dot" id="dataDot"></span><span id="dataLab">Demo data</span></button>
+  <div class="ccy">USD</div>
+  <button class="iconbtn" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">◐</button>
+</header>
+<div class="shell">
+  <aside class="rail">
+    <div class="grp"><h2>Markets</h2><div class="dd" id="mktDD"></div></div>
+    <div class="grp"><h2>Brands</h2><div class="dd" id="brDD"></div></div>
+    <div class="grp"><h2>Presentation export</h2>
+      <div class="deckbtns"><button class="deckbtn" data-deck="brand"><span class="di">▦</span><span><b>Brand focus</b><small>Brands as the story</small></span></button>
+        <button class="deckbtn" data-deck="market"><span class="di">◫</span><span><b>Market focus</b><small>Markets as the story</small></span></button></div>
+      <div class="railnote" id="deckNote">Builds a PowerPoint from the selection here: Current vs Prior forecast, as chosen in the header.</div></div>
+    <div class="grp"><h2>Channel</h2><div class="chips" id="chChips"></div></div>
+    <div class="grp"><h2>Central costs</h2><div class="metricseg" id="viewSeg" style="margin-top:10px"><button data-v="alloc" class="on">Allocated</button><button data-v="raw">Separate</button></div>
+      <div class="railnote" id="viewNote"></div></div>
+    <div class="grp"><h2>Closeouts</h2><div class="chips"><span class="chip on" id="coChip">Include closeouts</span></div>
+      <div class="railnote">Allowance % and units always exclude closeouts (allowances around 80% of gross, placeholder units).</div></div>
+    <div class="grp"><div class="railnote" id="fxNote"></div></div>
+  </aside>
+  <main>
+    <div class="navbar">
+      <div class="tabs-major" role="tablist" aria-label="Sections">
+        <button class="mtab on" data-g="fc" role="tab">Forecast Overview</button>
+        <button class="mtab" data-g="ins" role="tab">Insights</button>
+        <button class="mtab" data-g="wi" role="tab">What-If Scenarios</button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Views">
+        <button class="tab active" data-k="ov" data-g="fc">Overview</button>
+        <button class="tab" data-k="cmp" data-g="fc">Compare</button>
+        <button class="tab" data-k="mkt" data-g="fc">Market Health</button>
+        <button class="tab" data-k="brand" data-g="fc">Brand Health</button>
+        <button class="tab" data-k="mon" data-g="fc">Monthly</button>
+        <button class="tab" data-k="cfc" data-g="fc">Central FC</button>
+        <button class="tab" data-k="sku" data-g="ins" hidden>SKU Profitability</button>
+        <button class="tab" data-k="price" data-g="ins" hidden>Pricing</button>
+        <button class="tab" data-k="top" data-g="ins" hidden>Top 20 SKUs</button>
+        <button class="tab" data-k="eng" data-g="ins" hidden>Insights Engine</button>
+        <button class="tab" data-k="wi" data-g="wi" hidden>Scenario builder</button>
+      </div>
+    </div>
+
+    <section class="panel active" id="tab-ov">
+      <div class="card pad" style="margin-bottom:16px"><div class="eyebrow" id="ovEyebrow">Executive read · current selection</div><p class="narr" id="narr" style="margin-top:10px"></p></div>
+      <div class="kpigrid" id="kpiOv"></div>
+      <div class="ov-grid">
+        <div class="card pad"><div class="sec-title"><div><h3 id="ovPLT">EMEA P&amp;L</h3><div class="eyebrow" id="ovPLSub" style="margin-top:3px"></div></div><span class="chip" id="ovLfl" title="Only markets present in both the current and the prior forecast">Like-for-like markets</span></div>
+          <div class="tblwrap"><table class="pl ovpl" id="ovPL"></table></div><div class="note" id="ovPLNote"></div></div>
+        <div class="card pad"><div class="sec-title"><h3 id="ovBridgeT">P&amp;L bridge</h3><span class="eyebrow" id="ovScope"></span></div><div id="waterfall"></div>
+          <div class="note" id="ovBridgeNote"></div></div>
+      </div>
+      <div class="so-head"><h2>What stands out</h2><span class="eyebrow" id="soScope"></span></div>
+      <div class="so" id="soAllow"></div>
+      <div class="so" id="soCost"></div>
+      <div class="so" id="soOh"></div>
+    </section>
+
+    <section class="panel" id="tab-cmp">
+      <div class="cmphead">
+        <div class="subtabs" id="cmpSub"><button data-s="pri" class="on" id="cmpSubPri">vs Prior forecast</button><button data-s="py" id="cmpSubPy">vs Prior year</button></div>
+        <div class="ctlrow"><span class="chip on" id="cmpLfl" title="Only markets present in both datasets">Like-for-like markets</span></div>
+      </div>
+      <div id="cmpEmpty" class="card pad empty" hidden></div>
+      <div id="cmpBody">
+        <div class="action"><h2 id="cmpTitle"></h2><div class="action-sub" id="cmpSubT"></div></div>
+        <div class="kpigrid kpi7" id="kpiCmp"></div>
+        <div class="grid-w">
+          <div class="card pad"><div class="sec-title"><h3>Variable margin bridge</h3><span class="eyebrow">Prior → current</span></div><div id="cmpWf"></div>
+            <div class="note">Volume and price &amp; mix at the prior VM rate; each cost line = change in its rate (% of gross sales) × current gross sales. Steps add up exactly to the VM change.</div></div>
+          <div class="card pad"><div class="sec-title"><h3>Key messages</h3></div><ol class="msgs" id="cmpMsg"></ol></div>
+        </div>
+        <div class="grid-w" style="margin-top:16px">
+          <div class="card pad"><div class="sec-title"><h3 id="cmpBarsT">Change by market</h3>
+            <div class="metricseg" id="cmpMet"><button data-m="vm" class="on">VM $</button><button data-m="ns">Net revenue</button><button data-m="vmp">VM %</button></div></div><div id="cmpBars"></div></div>
+          <div class="card pad"><div class="sec-title"><h3>P&amp;L comparison</h3><span class="eyebrow">USD</span></div><div class="tblwrap"><table id="cmpPL" class="pl"></table></div></div>
+        </div>
+        <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Variance by market</h3><span class="eyebrow">Sorted by size of VM change</span></div><div class="tblwrap"><table id="cmpMkt"></table></div></div>
+        <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Variance by brand</h3><span class="eyebrow">Sorted by size of VM change</span></div><div class="tblwrap scrolly"><table id="cmpBr"></table></div></div>
+        <div class="note" id="cmpFoot"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-wi">
+      <div class="card pad" style="margin-bottom:16px">
+        <div class="sec-title"><div><h3>Scenario setup</h3><div class="eyebrow" id="wiPeriod" style="margin-top:3px"></div></div><div class="wi-acts"><span id="wiXmsg" role="status"></span><button class="so-btn" id="wiXlsx" type="button">Export to Excel <span aria-hidden="true">↓</span></button><button class="resetlink" id="wiReset">Clear levers</button></div></div>
+        <div class="wi-setup">
+          <label class="wi-f"><span>Base forecast</span><select class="sel" id="wiBase"></select><small>Same as the header Current forecast</small></label>
+          <label class="wi-f"><span>Built on actuals to</span><select class="sel" id="wiCut"></select><small>Levers change only the months after</small></label>
+        </div>
+        <div class="eyebrow" style="margin:18px 0 8px">Levers · applied in this order to the rest of the year</div>
+        <div id="wiLevers"></div>
+        <div class="wi-add" id="wiAdd"><span class="eyebrow">Add lever</span><button data-t="allow">+ Allowance change</button><button data-t="price">+ Price increase</button><button data-t="sales">+ Incremental sales</button><button data-t="fob">+ FOB share</button><button data-t="infl">+ Product cost inflation</button><button data-t="mg">+ Minimum Guarantee</button><button data-t="oh">+ A&amp;P / overheads</button><button data-t="close">+ Additional closeouts</button></div>
+        <div class="note" id="wiScopeNote"></div>
+      </div>
+      <div class="action"><h2 id="wiTitle"></h2></div>
+      <div class="kpigrid kpi7" id="kpiWi"></div>
+      <div class="ov-grid">
+        <div class="card pad"><div class="sec-title"><h3>Scenario P&amp;L · full year to operating profit</h3><span class="eyebrow">Base vs scenario · % of net revenue</span></div><div class="tblwrap"><table class="pl ovpl" id="wiPL"></table></div></div>
+        <div class="card pad"><div class="sec-title"><h3>Operating profit bridge</h3><span class="eyebrow">Base → each lever → scenario</span></div><div id="wiWf"></div></div>
+      </div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Key messages</h3><button class="so-btn" id="wiDetail" type="button">See in detail <span aria-hidden="true">→</span></button></div><ol class="msgs" id="wiMsg"></ol></div>
+      <div class="grid-w" style="margin-top:16px">
+        <div class="card pad"><div class="sec-title"><h3>Impact by market</h3></div><div class="tblwrap"><table id="wiMkt"></table></div></div>
+        <div class="card pad"><div class="sec-title"><h3>Impact by brand</h3></div><div class="tblwrap scrolly"><table id="wiBr"></table></div></div>
+      </div>
+      <div class="note" id="wiFoot"></div>
+    </section>
+
+    <section class="panel" id="tab-mkt">
+      <div class="kpigrid" id="kpiMkt"></div>
+      <div class="grid-w">
+        <div class="card pad"><div class="sec-title"><h3>Markets compared</h3>
+          <div class="metricseg" id="mMetric"><button data-m="opp" class="on">Op Profit %</button><button data-m="gmp">GM %</button><button data-m="ns">Net Sales</button><button data-m="op">Op Profit $</button></div></div>
+          <div id="mktBars"></div></div>
+        <div class="card pad"><div class="sec-title"><h3>Domestic vs Direct Import</h3></div><div class="tblwrap"><div id="mktChan"></div></div><div class="legend" id="mChanLeg"></div>
+          <div class="note" id="mChanNote"></div></div>
+      </div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Market P&amp;L &amp; health</h3><span class="eyebrow">USD</span></div>
+        <div class="tblwrap"><table id="mktTbl"></table></div>
+        <div class="note" id="mktNote"></div></div>
+    </section>
+
+    <section class="panel" id="tab-brand">
+      <div class="kpigrid" id="kpiBr"></div>
+      <div class="grid-w">
+        <div class="card pad"><div class="sec-title"><h3>Brand × Market</h3>
+          <div class="metricseg" id="hMetric"><button data-m="opp" class="on">Op Profit %</button><button data-m="gmp">GM %</button><button data-m="ns">Net Sales share</button></div></div>
+          <div class="tblwrap"><div id="heat"></div></div><div class="legend" id="hLeg"></div></div>
+        <div class="card pad"><div class="sec-title"><h3 id="brBarsT">Operating profit by brand</h3></div><div id="brBars"></div></div>
+      </div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Brand P&amp;L &amp; health</h3><span class="eyebrow">USD · by brand</span></div>
+        <div class="tblwrap"><table id="brTbl"></table></div></div>
+    </section>
+
+    <section class="panel" id="tab-sku">
+      <div class="card pad" style="margin-bottom:16px;position:relative;z-index:5">
+        <div class="sec-title"><h3>Select SKUs</h3><button class="resetlink" id="skuClear">Clear</button></div>
+        <div class="ms" id="skuMs">
+          <div class="ms-box" id="skuBox"><span id="skuSelChips"></span><input id="skuSearch" type="text" placeholder="Search SKU number or name…" autocomplete="off"></div>
+          <div class="ms-list" id="skuList" hidden></div>
+        </div>
+        <div class="note">Uses the Market, Channel and Brand filters on the left, plus the Central-costs view. Benchmarks: the SKU's brand and all SKUs in the region in the same filters, closeouts excluded.</div>
+      </div>
+      <div id="skuCompare"></div>
+      <div id="skuCards"></div>
+    </section>
+    <section class="panel" id="tab-cfc">
+      <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Central forecasts</h3>
+        <div class="metricseg" id="cfcSeg"><button data-v="jul">Jul Fcst</button><button data-v="sep">Sept FC</button><button data-v="oct">Oct FC</button><button data-v="ocp">Oct Phased</button><button data-v="nov">Nov FC</button><button data-v="nvp">Nov Phased</button><button data-v="cmp">Jul → Sept</button><button data-v="cmp2">Sept → Oct Phased</button><button data-v="cmp3" class="on">Oct → Nov Phased</button></div></div>
+        <p class="narr" id="cfcNarr" style="margin:0"></p></div>
+      <div class="kpigrid" id="kpiCfc"></div>
+      <div class="grid-w">
+        <div class="card pad"><div class="sec-title"><h3>P&amp;L bridge to Variable Margin</h3><span class="eyebrow" id="cfcScope"></span></div><div class="tblwrap"><table id="cfcPL"></table></div>
+          <div class="note">Central forecast profitability matrix: gross sales, allowances, cost of goods, royalties, then warehousing and freight. VM = GMR − warehousing − freight. Logistics apply to Domestic only. Submission-based forecasts use the submitted P&amp;L lines instead.</div></div>
+        <div class="card pad"><div class="sec-title"><h3 id="cfcBarsT">VM change by market</h3></div><div id="cfcBars"></div><div class="note">Click a market to focus on it.</div></div>
+      </div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3 id="cfcMktT">Markets</h3><span class="eyebrow">USD</span></div><div class="tblwrap"><table id="cfcMkt"></table></div>
+        <div class="note">Small figures under a value = change vs the earlier forecast in the comparison (green = better, red = worse). Allowance change: lower is better. Forecasts may cover different sets of markets; the market count is shown in each column header.</div></div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3 id="cfcBrT">Brands</h3><span class="eyebrow">USD · by brand</span></div><div class="tblwrap"><table id="cfcBr"></table></div></div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Reading the forecast scenarios</h3></div><div class="insights"><div class="insight neu"><div class="ico">▤</div><div><h4>Scenarios</h4><p>Each button picks a forecast scenario for the Current and Compare slots. Small figures under a value show the change versus the comparison scenario.</p></div></div><div class="insight neu"><div class="ico">=</div><div><h4>Phased forecasts</h4><p>Phased forecasts split each forecast by month and fit it to the monthly sales plan; uplift = phased ÷ before phasing. See the Monthly tab.</p></div></div></div></div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Comparing different methods</h3></div><div class="insights">
+        <div class="insight neu"><div class="ico">▤</div><div><h4>Submission-based forecasts</h4><p>Some scenarios are consolidated from market submissions rather than built from the central matrix, so their P&amp;L lines are mapped onto the same layout down to variable margin. Central costs and closeouts are excluded.</p></div></div>
+        <div class="insight neg"><div class="ico">!</div><div><h4>Not always like-for-like</h4><p>Scenarios built with different methods are not strictly comparable: a change between them mixes a method change with the forecast change.</p></div></div>
+      </div></div>
+    </section>
+    <section class="panel" id="tab-mon">
+      <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3 id="monTitle">Nov FC Phased · month by month</h3><div class="metricseg" id="monDs"><button data-k="nvp" class="on">Nov FC Phased</button><button data-k="ocp">Oct FC Phased</button></div><span class="eyebrow" id="monScope"></span></div>
+        <p class="narr" id="monNarr" style="margin:0"></p></div>
+      <div class="kpigrid" id="kpiMon"></div>
+      <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3 id="monChartT">Net Revenue by month</h3>
+        <div class="metricseg" id="monMetric"><button data-m="ns" class="on">Net Revenue</button><button data-m="vm">VM $</button><button data-m="vmp">VM %</button><button data-m="u">Units</button></div></div>
+        <div id="monChart"></div><div class="legend" id="monLeg"></div>
+        <div class="note">Bars = the phased forecast picked above. With Net Revenue selected and no brand filter, the dark tick is the monthly sales plan target and the dashed line is the same forecast before phasing (same SKUs, factor 1). Hover a bar for the numbers.</div></div>
+      <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Monthly P&amp;L</h3><span class="eyebrow">USD · fiscal months</span></div>
+        <div class="tblwrap"><table id="monPL"></table></div>
+        <div class="note">Same P&amp;L lines as the Central FC tab, split by fiscal month. Price, allowance, cost, royalty and logistics rates are the full-year rates of that forecast applied to each month.</div></div>
+      <div class="grid-w">
+        <div class="card pad"><div class="sec-title"><h3>Market × month</h3>
+          <div class="metricseg" id="monHeatSeg"><button data-m="share" class="on">Share of FY</button><button data-m="vmp">VM %</button></div></div>
+          <div class="tblwrap"><div id="monHeat"></div></div><div class="note" id="monHeatNote"></div></div>
+        <div class="card pad"><div class="sec-title"><h3>Phasing check</h3><span class="eyebrow">Net revenue</span></div>
+          <div class="tblwrap"><table id="monChk"></table></div>
+          <div class="note">Uplift = phased ÷ before phasing for the month: the volume factor applied to fit the monthly sales plan. Months with a plan but no forecast units cannot be scaled and are left as they are.</div></div>
+      </div>
+      <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Brands by month</h3><span class="eyebrow">Net revenue · peak month highlighted</span></div>
+        <div class="tblwrap"><table id="monBr"></table></div>
+        <div class="note">Each brand keeps its share of its market × channel full-year net revenue; only the timing across months moves.</div></div>
+    </section>
+<section class="panel" id="tab-ins">
+      <div class="subtabs" id="insSub" hidden><button data-s="price" class="on">Pricing</button><button data-s="top">Top 20 SKUs</button><button data-s="eng">Insights Engine</button></div>
+
+      <div class="ipanel on" id="ins-price">
+        <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Average SRP by brand and market</h3>
+          <div class="ctlrow"><div class="metricseg" id="prSrc"><button data-v="sub" class="on">Market submissions</button><button data-v="jul">FC1 · Jul Fcst</button><button data-v="sep">FC2 · Sept FC</button></div>
+          <div class="metricseg" id="prCcy"><button data-v="USD" class="on">USD</button><button data-v="EUR">EUR</button></div></div></div>
+          <p class="narr" id="prNarr" style="margin:0"></p></div>
+        <div class="kpigrid" id="kpiPr"></div>
+        <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Brand × Market average SRP</h3><span class="eyebrow" id="prScope"></span></div>
+          <div class="tblwrap"><div id="prHeat"></div></div><div class="legend" id="prLeg"></div>
+          <div class="note">Average SRP = Σ(units × SKU SRP) ÷ Σ units priced. Each cell is shaded against the same brand’s regional average: amber = the market sells a pricier mix, blue = a cheaper mix. Hover for units, SRP coverage and net price per unit.</div></div>
+        <div class="grid-w">
+          <div class="card pad"><div class="sec-title"><h3>Average SRP by brand (EMEA)</h3></div><div id="prBars"></div>
+            <div class="note">Bar = average SRP. Hover a bar for net sales per unit and the share of SRP it represents.</div></div>
+          <div class="card pad"><div class="sec-title"><h3>What stands out</h3></div><div class="insights" id="prIns"></div></div>
+        </div>
+        <div class="card pad" style="margin-top:16px"><div class="sec-title"><h3>Price-band mix</h3><select class="sel" id="prBand" style="width:auto;margin:0"></select></div>
+          <div class="tblwrap"><div id="prBandTbl"></div></div>
+          <div class="note">Share of units by SRP band in each market. Because the SRP of a SKU is the same everywhere, differences in average price come from which SKUs each market sells.</div></div>
+        <div class="note" id="prFoot"></div>
+      </div>
+
+      <div class="ipanel" id="ins-top">
+        <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Top 20 SKUs by net revenue · EMEA</h3>
+          <div class="metricseg" id="topSrc"><button data-v="sub" class="on">Market submissions · all markets</button><button data-v="jul">FC1 · Jul Fcst</button><button data-v="sep">FC2 · Sept FC</button></div></div>
+          <p class="narr" id="topNarr" style="margin:0"></p></div>
+        <div class="kpigrid" id="kpiTop"></div>
+        <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3 id="topTblT">Ranking within each market</h3><span class="eyebrow" id="topScope"></span></div>
+          <div class="tblwrap"><table class="toptbl" id="topTbl"></table></div>
+          <div class="legend"><span><span class="rk r1">1–5</span> top 5 in market</span><span><span class="rk r2">6–20</span></span><span><span class="rk r3">21–50</span></span><span><span class="rk r4">51+</span> weak in market</span><span><span class="rk r0">–</span> not sold</span><span><span class="rk r0">n/c</span> market not in the central forecast</span></div><div class="legend" id="topKey" style="margin-top:6px"></div>
+          <div class="note">Rank = position of the SKU among all SKUs in that market by net revenue (same Channel and Brand filters). “vs FC1/FC2” = change in regional rank against the other forecast (▲ = moved up).</div></div>
+        <div class="grid-w">
+          <div class="card pad"><div class="sec-title"><h3>Net revenue · top 20</h3></div><div id="topBars"></div><div class="note" id="topBarsNote"></div></div>
+          <div class="card pad"><div class="sec-title"><h3>What stands out</h3></div><div class="insights" id="topIns"></div></div>
+        </div>
+      </div>
+
+      <div class="ipanel" id="ins-eng">
+        <div class="card pad" style="margin-bottom:16px"><div class="sec-title"><h3>Insights Engine</h3><button class="resetlink" id="engClear">New conversation</button></div>
+          <p class="narr" style="margin:0">Ask a question about the cockpit data in plain English, for example comparing prices, margins, forecasts or SKUs between markets and brands. Answers are written from the cockpit data only. Each answer shows the data it used.</p>
+          <div class="sugg" id="engSugg"></div></div>
+        <div class="chat" id="engChat"></div>
+        <div class="chatin"><textarea id="engIn" placeholder="e.g. Compare Clayworks prices between France and Italy"></textarea><button class="btns" id="engStop" hidden>Stop</button><button class="btnp" id="engSend">Ask</button></div>
+        <div class="note" id="engNote">Each question uses your own Claude usage; the first one asks your permission.</div>
+      </div>
+    </section>
+    <div class="foot" id="foot"></div>
+  </main>
+</div>
+<div class="tooltip" id="tt"></div>
+<dialog class="datadlg" id="dataDlg" aria-labelledby="dataH">
+  <form method="dialog" class="dd-head"><h3 id="dataH">Data</h3><button class="iconbtn" aria-label="Close">×</button></form>
+  <p class="dd-status" id="dataStatus"></p>
+  <ol class="dd-steps">
+    <li><b>Download the template.</b> An Excel workbook filled with the data you are looking at now, one sheet per dataset, with a README.<br><button class="so-btn" id="dataTpl" type="button">Download template ↓</button></li>
+    <li><b>Put in your own numbers.</b> Keep the sheet names and column headers. Amounts in USD, costs as positive numbers.</li>
+    <li><b>Load it.</b> The cockpit checks the file and rebuilds every view on your data.<br><label class="so-btn ghost" for="dataFile">Load data pack…</label><input type="file" id="dataFile" accept=".xlsx,.xls" hidden></li>
+  </ol>
+  <p class="dd-msg" id="dataMsg" role="status"></p>
+  <div class="dd-foot"><span>Your file is read in this browser only and is never uploaded. A loaded pack is remembered in this browser.</span><button class="resetlink" id="dataReset" type="button">Back to demo data</button></div>
+</dialog>
